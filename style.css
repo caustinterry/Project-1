@@ -1,0 +1,50 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: wheat;
+}
+
+.carousel{
+    transform: translateY(-170px);
+    height: 800px;
+    perspective: 500px;
+   
+}
+
+.card-title{
+    margin: 50px;
+    display:inline;
+}
+.carousel .carousel-item{
+    width: 400px;
+    cursor: pointer;
+}
+
+.carousel .carousel-item img{
+    width: 100%;
+}
+h5{
+    margin: -50px 0 0;
+    padding: 0;
+    background: #ffffff;
+    color: #000000;
+    box-sizing: border-box;
+    padding: 10px 5px;
+    font-weight: bold;
+    font-size: 2em;
+    text-align: center;
+}
+
+ul{
+    list-style-type:square;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    color: #000000;
+    box-sizing: border-box;
+    text-align: center;
+}
+.btn-large{
+    border-radius: 10px;
+}
+
