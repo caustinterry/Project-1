@@ -6,7 +6,7 @@ body{
 
 .carousel{
     transform: translateY(-170px);
-    height: 800px;
+    height: 1200px;
     perspective: 500px;
    
 }
@@ -35,11 +35,11 @@ h5{
     text-align: center;
 }
 
-ul{
+.instructions{
     list-style-type:square;
     margin: 0;
     padding: 0;
-    background: #ffffff;
+        background: #ffffff;
     color: #000000;
     box-sizing: border-box;
     text-align: center;
