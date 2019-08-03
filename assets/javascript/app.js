@@ -1,5 +1,101 @@
-//'Search by ingredient' API URL. Response contains drink name, drink id, and drink pic. Seach currently set to vodka.
-let drinkURL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=Vodka";
+///////////////////////Global Variables//////////////////////////////////////////////
+var ingredient
+
+
+///////////////////////Weather and Location Code/////////////////////////////////////
+var lat;
+var lng;
+
+//Function to test if browser has location feature
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    alert = "Geolocation is not supported by this browser.";
+  }
+}
+
+
+//function running the location feature in broswer
+function showPosition(position) {
+  lat = position.coords.latitude;
+  lng = position.coords.longitude;
+
+  //Weather ajax call based upon coordinates pulled
+  function weather() {
+    var weatherAPI = "4b5ee7805cd7b4c7d16b45e019860920";
+    var weatherURL =
+      "https://api.openweathermap.org/data/2.5/weather?lat=" +
+      lat +
+      "&lon=" +
+      lng +
+      "&APPID=" +
+      weatherAPI +
+      "&units=imperial";
+
+    $.ajax({
+      url: weatherURL,
+      method: "GET"
+    }).then(function (weatherResponse) {
+      console.log(weatherResponse);
+      var temp = weatherResponse.main.temp
+      if (temp > 65) {
+          ingredient = 'pineapple juice'
+      } else {
+          ingredient = 'coffee'
+      }
+
+      $("#weatherDisplay").empty(); //emptying the weather display
+
+      var weatherCard = $("<div>"); //creates a horizontal card to display weather
+      weatherCard.attr("class", "card horizontal");
+
+      var weatherImgCard = $("<div>");
+      weatherImgCard.attr("class", "card-image");
+
+      var weatherImg = $("<img>"); //pulls weather image from ajax call
+      weatherImg.attr(
+        "src",
+        "http://openweathermap.org/img/wn/" +
+        weatherResponse.weather[0].icon +
+        "@2x.png"
+      );
+
+      var cardStack = $("<div>");
+      cardStack.attr("class", "card-stacked");
+
+      var cardContent = $("<div>");
+      cardContent.attr("class", "card-content");
+
+      $("#weatherDisplay").html(weatherCard); //adds the first card to HTML
+      weatherCard.append(weatherImgCard); //adds image card to weather card
+      weatherImgCard.append(weatherImg); //adds image to image card
+      weatherCard.append(cardStack); //adds stack for the card
+      cardStack.append(cardContent); //adds content location for card
+      $(".card-content").append("<p>" + weatherResponse.name + "</p>");
+      $(".card-content").append(
+        "<p>Current Temp: " + weatherResponse.main.temp + "</p>"
+      );
+    });
+  }
+  weather();
+  test();
+}
+
+getLocation();
+
+function test() {
+  //test to make sure the variables were being pulled globally
+  console.log(lat, lng);
+}
+
+
+//////////////////////////////////Cocktail Code///////////////////////////////////////////////////////
+
+
+//'Search by ingredient' API URL. Response contains drink name, drink id, and drink pic. 
+//Seach currently set to to global variable 'ingredient' determined by weather temperature.
+let drinkURL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=" + ingredient;
 
 //'Search by id' API URL. Response contains name, pic, measurements, instructions, and ingredients
 let drinkDetailsURL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=";
@@ -80,84 +176,4 @@ let parseIngredients = (function (drink, drinkPosition) {
 //   return Math.floor(Math.random() * maxNumber);
 // };
 
-var lat;
-var lng;
-
-//Function to test if browser has location feature
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-  } else {
-    alert = "Geolocation is not supported by this browser.";
-  }
-}
-
-
-//function running the location feature in broswer
-function showPosition(position) {
-  lat = position.coords.latitude;
-  lng = position.coords.longitude;
-
-  //Weather ajax call based upon coordinates pulled
-  function weather() {
-    var weatherAPI = "4b5ee7805cd7b4c7d16b45e019860920";
-    var weatherURL =
-      "https://api.openweathermap.org/data/2.5/weather?lat=" +
-      lat +
-      "&lon=" +
-      lng +
-      "&APPID=" +
-      weatherAPI +
-      "&units=imperial";
-
-    $.ajax({
-      url: weatherURL,
-      method: "GET"
-    }).then(function (weatherResponse) {
-      console.log(weatherResponse);
-      // if(weatherResponse.)
-
-      $("#weatherDisplay").empty(); //emptying the weather display
-
-      var weatherCard = $("<div>"); //creates a horizontal card to display weather
-      weatherCard.attr("class", "card horizontal");
-
-      var weatherImgCard = $("<div>");
-      weatherImgCard.attr("class", "card-image");
-
-      var weatherImg = $("<img>"); //pulls weather image from ajax call
-      weatherImg.attr(
-        "src",
-        "http://openweathermap.org/img/wn/" +
-        weatherResponse.weather[0].icon +
-        "@2x.png"
-      );
-
-      var cardStack = $("<div>");
-      cardStack.attr("class", "card-stacked");
-
-      var cardContent = $("<div>");
-      cardContent.attr("class", "card-content");
-
-      $("#weatherDisplay").html(weatherCard); //adds the first card to HTML
-      weatherCard.append(weatherImgCard); //adds image card to weather card
-      weatherImgCard.append(weatherImg); //adds image to image card
-      weatherCard.append(cardStack); //adds stack for the card
-      cardStack.append(cardContent); //adds content location for card
-      $(".card-content").append("<p>" + weatherResponse.name + "</p>");
-      $(".card-content").append(
-        "<p>Current Temp: " + weatherResponse.main.temp + "</p>"
-      );
-    });
-  }
-  weather();
-  test();
-}
-
-getLocation();
-
-function test() {
-  //test to make sure the variables were being pulled globally
-  console.log(lat, lng);
-}
 
