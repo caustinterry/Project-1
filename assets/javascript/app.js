@@ -1,49 +1,54 @@
+//'Search by ingredient' API URL. Response contains drink name, drink id, and drink pic. Seach currently set to vodka.
 let drinkURL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=Vodka";
+
+//'Search by id' API URL. Response contains name, pic, measurements, instructions, and ingredients
 let drinkDetailsURL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=";
-let currentDrinkDetailsURL
 
 
-//ajax call to brink in drink
+//Generates a random number to select a random drink
+let getRandom = (function (maxNumber) {
+    return Math.floor(Math.random() * maxNumber);
+ })
+
+//Ajax call to fetch a list of drinks based on ingredient
 $.ajax({
    url: drinkURL,
    method: 'GET'
 }).then(function (response) {
-   console.log(response);
+    
 
    for (var i = 0; i <= 5; i++) {
-
+        //Generates a random number on each loop and chooses a drink
        let randomDrink = getRandom(response.drinks.length);
-
-
        let currentDrink = response.drinks[randomDrink];
-       console.log(currentDrink.idDrink)
-       // currentDrink = currentDrink.idDrink
-       currentDrinkDetailsURL = drinkDetailsURL + currentDrink.idDrink;
+
+       //Appends the current drink in to the corresponding span pre-set in HTML.
+       //Assigns a data-attr 'id' to be used as a unique identifier for second Ajax call.
        $('#drinkName' + i).html(currentDrink.strDrink);
        $('#drinkName' + i).attr('data-id', currentDrink.idDrink)
 
    }
+   //Calling this function after the above 'for loop' finishes to keep code synchronous
    drinkId()
 })
 
 
-
+//This function makes an Ajax call for each drink name added into the HTML
 function drinkId() {
-   for (let i = 1; i < 6; i++) {
-       var key = $('#drinkName' + i).attr('data-id')
-       // var drinkNumber =
-       console.log('key: ' + key)
 
+    for (let i = 1; i < 6; i++) {
+        //Pulls the data attr 'id' value from #drinkName span to use as 'key' for URL
+       var key = $('#drinkName' + i).attr('data-id')
+       
        $.ajax({
-           url: 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=' + key,
+           url: drinkDetailsURL + key,
            method: 'GET'
        }).then(function (response) {
-           // for (var i = 1; i < 6; i++) {
-               console.log(response.drinks[0].strDrinkThumb)
-               var drinkImg = response.drinks[0].strDrinkThumb
-               console.log(i);
-               $('#drinkImage' + i).attr('src', drinkImg)
-           // }
+            
+            //sets the corresponding img attr to the drinks url
+            var drinkImg = response.drinks[0].strDrinkThumb
+            $('#drinkImage' + i).attr('src', drinkImg)
+           
 
        })
    }
@@ -67,6 +72,3 @@ function drinkId() {
 // })
 
 
-let getRandom = (function (maxNumber) {
-   return Math.floor(Math.random() * maxNumber);
-})
