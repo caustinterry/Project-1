@@ -1,5 +1,6 @@
 ///////////////////////Global Variables//////////////////////////////////////////////
 var ingredient;
+var favorites = getFavorites()
 
 
 ///////////////////////Weather and Location Code/////////////////////////////////////
@@ -88,19 +89,51 @@ function test() {
 //////////////////////////////////Cocktail Code///////////////////////////////////////////////////////
 
 
-
-
-
-
-
-
-
-
-
 //Generates a random number to select a random drink
 let getRandom = (function (maxNumber) {
   return Math.floor(Math.random() * maxNumber);
 })
+
+///////////////function that loads the drinks based on the weather ///////////////////
+////////TODO: this will need to be added into our weather function once the search feature is enabled///////
+
+let loadDrinks = (function (currentTemp) {
+
+
+  let randomIngredient = weatherBasedIngredient(currentTemp);
+
+
+  //Search currently set to to global variable 'ingredient' determined by weather temperature.
+  let drinkURL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=" + randomIngredient;
+
+
+
+  //Ajax call to fetch a list of drinks based on ingredient
+  $.ajax({
+    url: drinkURL,
+    method: 'GET'
+  }).then(function (response) {
+    
+
+    for (var i = 0; i <= 5; i++) {
+      //Generates a random number on each loop and chooses a drink
+      let randomDrink = getRandom(response.drinks.length);
+      let currentDrink = response.drinks[randomDrink];
+
+
+      //Appends the current drink in to the corresponding span pre-set in HTML.
+      //Assigns a data-attr 'id' to be used as a unique identifier for second Ajax call.
+      $('#drinkName' + i).html(currentDrink.strDrink);
+      $('#drinkName' + i).attr('data-id', currentDrink.idDrink)
+
+    }
+    //Calling this function after the above 'for loop' finishes to keep code synchronous
+    drinkId()
+    // addFav()
+  })
+
+
+});
 
 //'Search by id' API URL. Response contains name, pic, measurements, instructions, and ingredients
 let drinkDetailsURL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=";
@@ -117,21 +150,24 @@ function drinkId() {
       url: drinkDetailsURL + key,
       method: 'GET'
     }).then(function (response) {
-
+      
       //sets the corresponding img attr to the drinks url
       var currentDrinkDetail = response.drinks[0]
+      
       var drinkImg = response.drinks[0].strDrinkThumb
+      var instructions = currentDrinkDetail.strInstructions
       $('#drinkImage' + i).attr('src', drinkImg)
-      $('#drinkInstructions' + i).html(currentDrinkDetail.strInstructions);
+      $('#drinkInstructions' + i).html(instructions);
 
       //function call to bring in drink ingredients
       parseIngredients(currentDrinkDetail, i);
 
     })
   }
+  addFavOption()
+  
+          
 }
-
-
 
 /////////////////////////Function to parse the multiple ingredients////////////////////
 let parseIngredients = (function (drink, drinkPosition) {
@@ -147,8 +183,6 @@ let parseIngredients = (function (drink, drinkPosition) {
 
   }
 })
-
-
 
 ////////////////////////conditional based on the weather//////////////////////////
 let weatherBasedIngredient = (function (currentTemp) {
@@ -180,46 +214,63 @@ let weatherBasedIngredient = (function (currentTemp) {
 });
 
 
-
-///////////////function that loads the drinks based on the weather ///////////////////
-////////TODO: this will need to be added into our weather function once the search feature is enabled///////
-
-let loadDrinks = (function (currentTemp) {
-
-
-  let randomIngredient = weatherBasedIngredient(currentTemp);
-
-
-  //Search currently set to to global variable 'ingredient' determined by weather temperature.
-  let drinkURL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=" + randomIngredient;
-
-
-
-  //Ajax call to fetch a list of drinks based on ingredient
-  $.ajax({
-    url: drinkURL,
-    method: 'GET'
-  }).then(function (response) {
-
-
-    for (var i = 0; i <= 5; i++) {
-      //Generates a random number on each loop and chooses a drink
-      let randomDrink = getRandom(response.drinks.length);
-      let currentDrink = response.drinks[randomDrink];
-
-
-      //Appends the current drink in to the corresponding span pre-set in HTML.
-      //Assigns a data-attr 'id' to be used as a unique identifier for second Ajax call.
-      $('#drinkName' + i).html(currentDrink.strDrink);
-      $('#drinkName' + i).attr('data-id', currentDrink.idDrink)
-
-    }
-    //Calling this function after the above 'for loop' finishes to keep code synchronous
-    drinkId()
-  })
-
-
-});
-
 loadDrinks(95);
 
+
+////////////////////////////////Favorites and JSON///////////////////////////////////////////////
+function getFavorites() {
+  favorites = JSON.parse(localStorage.getItem('favorites'))
+
+  if (favorites) {
+    return favorites
+  } else {
+    $('.fav-message').html('<h4 class="read">Click<i class="material-icons left">favorite_border</i> to add your favorite recipes here!</h4>')
+    return favorites = []
+    
+  }
+}
+
+function saveFavorites(a, b, c, d) {
+  favorites.push({
+   name: a,
+   img: b,
+   instructions: c,
+   ingredients: d
+  })
+  
+  localStorage.removeItem('favorites')
+  localStorage.setItem('favorites', JSON.stringify(favorites))
+}
+
+function addFavOption() {
+  $('.material-icons').on("click", function () {
+
+    $(this).css('background-color', 'red')
+    $('.read').css('display', 'none')
+
+    var heartNum = $(this).attr('data-heart')
+    var name = $('#drinkName' + [heartNum]).text()
+    var img = $('#drinkImage' + [heartNum]).attr('src')
+    var instructions = $('#drinkInstructions' + [heartNum]).text()
+    var ingredients = $('#drinkIngredients' + [heartNum]).text()
+    saveFavorites(name, img, instructions, ingredients)
+    
+    // displayFavorites()
+  
+  }) 
+    
+}
+
+function displayFavorites() {
+    $('.favorites').empty()
+
+    for (var i = 0; i < favorites.length; i++) {
+      var drinkBox = $('<div>')
+      drinkBox.append(favorites[i])
+      $('.favorites').append(drinkBox)
+    }
+}
+
+function delFav() {
+
+}
