@@ -290,7 +290,7 @@ function displayFavorites() {
       img.attr('src', favorites[i].img)
       drinkBox.append(img)
 
-      var instructionsBox = $('<div>')
+      var instructionsBox = $('<div>').addClass('instructions')
       var ingredients = $('<ul>')
       ingredients.text(favorites[i].ingredients)
       var instructions = $('<div>')
@@ -300,7 +300,7 @@ function displayFavorites() {
       drinkBox.append(instructionsBox)
 
     
-      $('.favorite-drinks').append(drinkBox)
+      $('.favorite-drinks').prepend(drinkBox)
     }
     delFav()
 }
@@ -308,10 +308,7 @@ function displayFavorites() {
 function delFav() {
 
   $('.rmv-fav').on('click', function (e) {
-      console.log(e.target)
       
-      // $(this).parent().parent().remove()
-      // $(this).remove()
       var num = $(this).attr('fav-heart')
       favorites.splice(num, 1)
       console.log(num)
