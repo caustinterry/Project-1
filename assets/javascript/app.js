@@ -131,7 +131,7 @@ let loadDrinks = (function (currentTemp) {
     }
     //Calling this function after the above 'for loop' finishes to keep code synchronous
     drinkId()
-    // addFav()
+    
   })
 
 
@@ -232,19 +232,19 @@ function getFavorites() {
   }
 }
 
-function saveFavorites(a, b, c, d, e) {
+function saveFavorites(a, b, c, d) {
   favorites.push({
    name: a,
    img: b,
    instructions: c,
-   ingredients: d,
-   number: e
+   ingredients: d
   })
   
   localStorage.removeItem('favorites')
   localStorage.setItem('favorites', JSON.stringify(favorites))
   displayFavorites()
 }
+
 
 function addFavOption() {
 
@@ -257,12 +257,14 @@ function addFavOption() {
     var name = $('#drinkName' + [heartNum]).text()
     var img = $('#drinkImage' + [heartNum]).attr('src')
     var instructions = $('#drinkInstructions' + [heartNum]).text()
-    var ingredients = $('#drinkIngredients' + [heartNum]).text()
+
+    var ingredients = $('#drinkIngredients' + [heartNum]).children().text()
+    var ingredients2 = $('#drinkIngredients' + [heartNum]).children().eq(1).text()
+    console.log(ingredients)
+    console.log(ingredients2)
+
     saveFavorites(name, img, instructions, ingredients)
     displayFavorites()
-    
-    
-    
   
   }) 
     
@@ -308,12 +310,12 @@ function displayFavorites() {
 function delFav() {
 
   $('.rmv-fav').on('click', function (e) {
-      
+      console.log(favorites)
       var num = $(this).attr('fav-heart')
-      favorites.splice(num, 1)
       console.log(num)
+      favorites.splice(num, 1)
+      console.log(favorites)
       
-
       localStorage.removeItem('favorites')
       localStorage.setItem('favorites', JSON.stringify(favorites))
 
@@ -321,4 +323,7 @@ function delFav() {
       })
 
 }
+
+
+///night              
 
