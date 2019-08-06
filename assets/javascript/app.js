@@ -1,7 +1,6 @@
 ///////////////////////Global Variables//////////////////////////////////////////////
 var ingredient;
-var favorites = getFavorites()
-displayFavorites()
+
 
 
 
@@ -220,6 +219,13 @@ loadDrinks(95);
 
 
 ////////////////////////////////Favorites and JSON///////////////////////////////////////////////
+
+var favorites = getFavorites()
+
+displayFavorites(favorites)
+
+
+//Get favorites from localStorage. If favorites parse, if not
 function getFavorites() {
   favorites = JSON.parse(localStorage.getItem('favorites'))
 
@@ -242,7 +248,7 @@ function saveFavorites(a, b, c, d) {
   
   localStorage.removeItem('favorites')
   localStorage.setItem('favorites', JSON.stringify(favorites))
-  displayFavorites()
+  
 }
 
 
@@ -259,44 +265,48 @@ function addFavOption() {
     var instructions = $('#drinkInstructions' + [heartNum]).text()
 
     var ingredients = $('#drinkIngredients' + [heartNum]).children().text()
+    var children = $('#drinkIngredients' + [heartNum]).children()
+    console.log(children)
     var ingredients2 = $('#drinkIngredients' + [heartNum]).children().eq(1).text()
-    console.log(ingredients)
-    console.log(ingredients2)
+    // console.log(ingredients)
+    // console.log(ingredients2)
 
     saveFavorites(name, img, instructions, ingredients)
-    displayFavorites()
+    displayFavorites(favorites)
   
   }) 
     
 }
 
-function displayFavorites() {
+function displayFavorites(array) {
 
     $('.favorite-drinks').empty()
 
-    for (var i = 0; i < favorites.length; i++) {
+    for (var i = 0; i < array.length; i++) {
 
       var drinkBox = $('<div>').addClass('drinkBox')
       var h5 = $('<h5>')
       var icon = $('<i>').addClass('material-icons left rmv-fav')
       icon.attr('fav-heart', i)
       icon.css('background-color', 'red')
+      icon.css('border-radius', '5px')
       icon.text('favorite_border')
       var drinkName = $('<span>')
-      drinkName.text(favorites[i].name)
+      drinkName.text(array[i].name)
+      // console.log(favorites[i].name)
       h5.append(icon)
       h5.append(drinkName)
       drinkBox.append(h5)
 
       var img = $('<img>')
-      img.attr('src', favorites[i].img)
+      img.attr('src', array[i].img)
       drinkBox.append(img)
 
       var instructionsBox = $('<div>').addClass('instructions')
       var ingredients = $('<ul>')
-      ingredients.text(favorites[i].ingredients)
+      ingredients.text(array[i].ingredients)
       var instructions = $('<div>')
-      instructions.text(favorites[i].instructions)
+      instructions.text(array[i].instructions)
       instructionsBox.append(ingredients)
       instructionsBox.append(instructions)
       drinkBox.append(instructionsBox)
@@ -310,20 +320,22 @@ function displayFavorites() {
 function delFav() {
 
   $('.rmv-fav').on('click', function (e) {
-      console.log(favorites)
+      // console.log($(this))
+      // $(this).parent().parent().remove()
+      // $(this).remove()
+      // console.log(favorites)
       var num = $(this).attr('fav-heart')
-      console.log(num)
+      // console.log(num)
       favorites.splice(num, 1)
-      console.log(favorites)
+      // console.log(favorites)
       
       localStorage.removeItem('favorites')
       localStorage.setItem('favorites', JSON.stringify(favorites))
+      
 
-      displayFavorites()
+      displayFavorites(favorites)
       })
 
 }
-
-
-///night              
+              
 
