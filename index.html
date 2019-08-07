@@ -1,152 +1,129 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Carousel Using Materialize</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
-  </head>
 
-  <body>
-    <div class="col s12 m6">
-      <div class="card">
-        <div class="card-image">
-          <img src="img/weather.jpg" height="300px" />
-          <span class="card-title">
-            <h3>GET A DRINK IDEA</h3>
-            <form>
-              <div class="input-field">
-                <i class="material-icons prefix">place</i>
-                <input
-                  placeholder="Enter a location"
-                  id="icon_prefix"
-                  type="location"
-                  class="validate"
-                />
-              </div>
-              <button
-                id="SubmitButton"
-                class="btn waves-effect waves-light #546e7a blue-grey darken-1"
-                type="submit"
-                name="action"
-              >
-                Submit
-              </button>
-            </form>
-          </span>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <title>Carousel Using Materialize</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="col s12 m6">
+    <div class="card">
+      <div class="card-image">
+        <img src="img/weather.jpg" height="300px" />
+        <span class="card-title">
+          <h3>GET A DRINK IDEA</h3>
+          <form>
+            <div class="input-field">
+              <i class="material-icons prefix">place</i>
+              <input placeholder="Enter a location" id="icon_prefix" type="location" class="validate" />
+            </div>
+            <button id="SubmitButton" class="btn waves-effect waves-light #546e7a blue-grey darken-1" type="submit"
+              name="action">
+              Submit
+            </button>
+          </form>
+        </span>
       </div>
     </div>
-    <br />
+  </div>
+  <br />
 
-    <div class="container">
-      <div class="row">
-        <div class="input-field col s3">
-          <select>
-            <option value="" disabled selected
-              >Alcoholic or Non-Alcoholic</option
-            >
-            <option value="1">Alcoholic</option>
-            <option value="2">Non_Alcoholic</option>
-          </select>
-          <label>Filter</label>
-        </div>
-        <div class="input-field col s3">
-          <select>
-            <option value="" disabled selected>Liquor</option>
-            <option value="1">Vodka</option>
-            <option value="2">Brandy</option>
-            <option value="2">Rum</option>
-            <option value="2">Gin</option>
-            <option value="2">Whiskey</option>
-          </select>
-          <label>Filter</label>
-        </div>
-        <div class="col s3"></div>
-        <div class="col s3 weather-display" id="weatherDisplay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="input-field col s3">
+        <select>
+          <option value="" disabled selected>Alcoholic or Non-Alcoholic</option>
+          <option value="1">Alcoholic</option>
+          <option value="2">Non_Alcoholic</option>
+        </select>
+        <label>Filter</label>
       </div>
+      <div class="input-field col s3">
+        <select>
+          <option value="" disabled selected>Liquor</option>
+          <option value="1">Vodka</option>
+          <option value="2">Brandy</option>
+          <option value="2">Rum</option>
+          <option value="2">Gin</option>
+          <option value="2">Whiskey</option>
+        </select>
+        <label>Filter</label>
+      </div>
+      <div class="col s3"></div>
+      <div class="col s3 weather-display" id="weatherDisplay"></div>
+    </div>
 
-      <div class="carousel">
-        <div class="carousel-item">
-          <h5>
-            <i class="material-icons left" data-heart="1">favorite_border</i
-            ><span id="drinkName1"></span>
-          </h5>
-          <img id="drinkImage1" src" ">
+    <div class="carousel">
+      <div class="carousel-item">
+        <h5>
+          <i class="material-icons left" data-heart="1">favorite_border</i><span id="drinkName1"></span>
+        </h5>
+        <img id="drinkImage1" src" ">
           <div class=" instructions">
-            <ul id="drinkIngredients1"></ul>
-            <div id="drinkInstructions1"></div>
-          </div>
-        </div>
-
-        <div class="carousel-item">
-          <h5>
-            <i class="material-icons left" data-heart="2">favorite_border</i
-            ><span id="drinkName2"></span>
-          </h5>
-          <img id="drinkImage2" src=" " />
-          <div class="instructions">
-            <ul id="drinkIngredients2"></ul>
-            <div id="drinkInstructions2"></div>
-          </div>
-        </div>
-
-        <div class="carousel-item">
-          <h5>
-            <i class="material-icons left" data-heart="3">favorite_border</i
-            ><span id="drinkName3"></span>
-          </h5>
-          <img id="drinkImage3" src=" " />
-          <div class="instructions">
-            <ul id="drinkIngredients3"></ul>
-            <div id="drinkInstructions3"></div>
-          </div>
-        </div>
-
-        <div class="carousel-item">
-          <h5>
-            <i class="material-icons left" data-heart="4">favorite_border</i
-            ><span id="drinkName4"></span>
-          </h5>
-          <img id="drinkImage4" src=" " />
-          <div class="instructions">
-            <ul id="drinkIngredients4"></ul>
-            <div id="drinkInstructions4"></div>
-          </div>
-        </div>
-
-        <div class="carousel-item">
-          <h5>
-            <i class="material-icons left" data-heart="5">favorite_border</i
-            ><span id="drinkName5"></span>
-          </h5>
-          <img id="drinkImage5" src=" " />
-          <div class="instructions">
-            <ul id="drinkIngredients5"></ul>
-            <div id="drinkInstructions5"></div>
-          </div>
-        </div>
+        <ul id="drinkIngredients1"></ul>
+        <div id="drinkInstructions1"></div>
       </div>
     </div>
 
-    <div class="favorites">
-      <div class="fav-message"></div>
-      <div class="favorite-drinks"></div>
+    <div class="carousel-item">
+      <h5>
+        <i class="material-icons left" data-heart="2">favorite_border</i><span id="drinkName2"></span>
+      </h5>
+      <img id="drinkImage2" src=" " />
+      <div class="instructions">
+        <ul id="drinkIngredients2"></ul>
+        <div id="drinkInstructions2"></div>
+      </div>
     </div>
 
-    <script
-      type="text/javascript"
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
-    ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script type="text/javascript" src="caraousel.js"></script>
-    <script type="text/javascript" src="assets/javascript/app.js"></script>
-  </body>
+    <div class="carousel-item">
+      <h5>
+        <i class="material-icons left" data-heart="3">favorite_border</i><span id="drinkName3"></span>
+      </h5>
+      <img id="drinkImage3" src=" " />
+      <div class="instructions">
+        <ul id="drinkIngredients3"></ul>
+        <div id="drinkInstructions3"></div>
+      </div>
+    </div>
+
+    <div class="carousel-item">
+      <h5>
+        <i class="material-icons left" data-heart="4">favorite_border</i><span id="drinkName4"></span>
+      </h5>
+      <img id="drinkImage4" src=" " />
+      <div class="instructions">
+        <ul id="drinkIngredients4"></ul>
+        <div id="drinkInstructions4"></div>
+      </div>
+    </div>
+
+    <div class="carousel-item">
+      <h5>
+        <i class="material-icons left" data-heart="5">favorite_border</i><span id="drinkName5"></span>
+      </h5>
+      <img id="drinkImage5" src=" " />
+      <div class="instructions">
+        <ul id="drinkIngredients5"></ul>
+        <div id="drinkInstructions5"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="favorites">
+    <div class="fav-message"></div>
+    <div class="favorite-drinks"></div>
+  </div>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script type="text/javascript" src="caraousel.js"></script>
+  <script type="text/javascript" src="assets/javascript/app.js"></script>
+</body>
+
 </html>
