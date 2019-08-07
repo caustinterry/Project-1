@@ -1,7 +1,10 @@
 ///////////////////////Global Variables//////////////////////////////////////////////
 var ingredient;
-var favorites = getFavorites();
-displayFavorites();
+
+
+
+
+
 
 ///////////////////////Weather and Location Code/////////////////////////////////////
 var lat;
@@ -175,10 +178,14 @@ let loadDrinks = function (currentTemp) {
       $("#drinkName" + i).attr("data-id", currentDrink.idDrink);
     }
     //Calling this function after the above 'for loop' finishes to keep code synchronous
-    drinkId();
-    // addFav()
-  });
-};
+
+    drinkId()
+    
+  })
+
+
+});
+
 
 //'Search by id' API URL. Response contains name, pic, measurements, instructions, and ingredients
 let drinkDetailsURL =
@@ -217,14 +224,12 @@ let parseIngredients = function (drink, drinkPosition) {
   );
 
   for (let i = 1; i <= 15; i++) {
-    if (drink["strMeasure" + i] != null && drink["strIngredient" + i] != null) {
-      $("#drinkIngredients" + drinkPosition).append(
-        "<li>" +
-        drink["strMeasure" + i] +
-        " " +
-        drink["strIngredient" + i] +
-        "</li>"
-      );
+
+
+    if (drink['strMeasure' + i].length !== 0 && drink['strIngredient' + i].length !== 0) {
+      $('#drinkIngredients' + drinkPosition).append('<li>' + drink['strMeasure' + i] + ' ' + drink['strIngredient' + i] + '</li>');
+
+
     }
   }
 };
@@ -272,80 +277,123 @@ let weatherBasedIngredient = function (currentTemp) {
 // loadDrinks(95);
 
 ////////////////////////////////Favorites and JSON///////////////////////////////////////////////
-function getFavorites() {
-  favorites = JSON.parse(localStorage.getItem("favorites"));
 
-  if (favorites) {
-    return favorites;
+var favorites = getFavorites()
+
+displayFavorites()
+
+
+//Get favorites from localStorage. If favorites parse, if not
+function getFavorites() {
+  favorites = JSON.parse(localStorage.getItem('favorites'))
+  
+  if (favorites !== null && favorites.length !== 0) {
+    return favorites
   } else {
-    $(".fav-message").html(
-      '<h4 class="read">Click<i class="material-icons left">favorite_border</i> to add your favorite recipes here!</h4>'
-    );
-    return (favorites = []);
+    $('.fav-message').html('<h4 class="read">Click &quot;<i class="material-icons">favorite_border</i>&quot; to add your favorite recipes here!</h4>')
+    return favorites = []
+    
   }
 }
 
-function saveFavorites(a, b, c, d, e) {
-  favorites.push({
-    name: a,
-    img: b,
-    instructions: c,
-    ingredients: d,
-    number: e
-  });
+function saveFavorites(a, b, c, d) {
+  
+    favorites.push({
+      name: a,
+      img: b,
+      instructions: c,
+      ingredients: d
+     })
+     
+     localStorage.removeItem('favorites')
+     localStorage.setItem('favorites', JSON.stringify(favorites))
+  
+  
+  
 
-  localStorage.removeItem("favorites");
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-  displayFavorites();
 }
 
-function addFavOption() {
-  $(".material-icons").on("click", function () {
-    $(this).css("background-color", "red");
-    $(".read").css("display", "none");
 
-    var heartNum = $(this).attr("data-heart");
-    var name = $("#drinkName" + [heartNum]).text();
-    var img = $("#drinkImage" + [heartNum]).attr("src");
-    var instructions = $("#drinkInstructions" + [heartNum]).text();
-    var ingredients = $("#drinkIngredients" + [heartNum]).text();
-    saveFavorites(name, img, instructions, ingredients);
-    displayFavorites();
-  });
+function addFavOption() {
+
+
+  $('.material-icons').on("click", function () {
+
+    $(this).css('background-color', 'red')
+    $(this).css('border-radius', '5px')
+    $('.read').css('display', 'none')
+
+    var heartNum = $(this).attr('data-heart')
+    var name = $('#drinkName' + [heartNum]).text()
+    var img = $('#drinkImage' + [heartNum]).attr('src')
+    var instructions = $('#drinkInstructions' + [heartNum]).text()
+    
+    var newIngredients = []
+    var children = $('#drinkIngredients' + [heartNum]).children().length
+
+    for (var i = 0; i < children; i++) {
+      var ingredients2 = $('#drinkIngredients' + [heartNum]).children().eq(i).text()
+      newIngredients.push(ingredients2)
+    }
+    
+    saveFavorites(name, img, instructions, newIngredients)
+    displayFavorites()
+  
+  }) 
+    
 }
 
 function displayFavorites() {
-  $(".favorite-drinks").empty();
 
-  for (var i = 0; i < favorites.length; i++) {
-    var drinkBox = $("<div>").addClass("drinkBox");
-    var h5 = $("<h5>");
-    var icon = $("<i>").addClass("material-icons left rmv-fav");
-    icon.attr("fav-heart", i);
-    icon.css("background-color", "red");
-    icon.text("favorite_border");
-    var drinkName = $("<span>");
-    drinkName.text(favorites[i].name);
-    h5.append(icon);
-    h5.append(drinkName);
-    drinkBox.append(h5);
-
-    var img = $("<img>");
-    img.attr("src", favorites[i].img);
-    drinkBox.append(img);
-
-    var instructionsBox = $("<div>").addClass("instructions");
-    var ingredients = $("<ul>");
-    ingredients.text(favorites[i].ingredients);
-    var instructions = $("<div>");
-    instructions.text(favorites[i].instructions);
-    instructionsBox.append(ingredients);
-    instructionsBox.append(instructions);
-    drinkBox.append(instructionsBox);
-
-    $(".favorite-drinks").prepend(drinkBox);
+  if (favorites === null || favorites.length === 0) {
+    $('.fav-message').html('<h4 class="read">Click &quot<i class="material-icons">favorite_border</i>&quot to add your favorite recipes here!</h4>')
   }
-  delFav();
+
+    $('.favorite-drinks').empty()
+
+      for (var i = 0; i < favorites.length; i++) {
+
+        var drinkBox = $('<div>').addClass('drinkBox')
+        var h5 = $('<h5>')
+        var icon = $('<i>').addClass('material-icons left rmv-fav')
+        icon.attr('data-heart', i)
+        icon.css('background-color', 'red')
+        icon.css('border-radius', '5px')
+        icon.text('favorite_border')
+        var drinkName = $('<span>')
+        drinkName.text(favorites[i].name)
+        
+        h5.append(icon)
+        h5.append(drinkName)
+        drinkBox.append(h5)
+  
+        var img = $('<img>')
+        img.attr('src', favorites[i].img)
+        drinkBox.append(img)
+  
+        var instructionsBox = $('<div>').addClass('instructions')
+        var ingredients = $('<ul>')
+
+        var sup = favorites[i].ingredients
+        for (var j = 0; j < sup.length; j++) {
+          var li = $('<li>')
+          var item = sup[j]
+          li.text(item)
+          ingredients.append(li)
+
+        }
+
+        var instructions = $('<div>')
+        instructions.text(favorites[i].instructions)
+        instructionsBox.append(ingredients)
+        instructionsBox.append(instructions)
+        drinkBox.append(instructionsBox)
+
+        $('.favorite-drinks').prepend(drinkBox)
+      }
+    
+    delFav()
+
 }
 
 function delFav() {
@@ -354,9 +402,19 @@ function delFav() {
     favorites.splice(num, 1);
     console.log(num);
 
-    localStorage.removeItem("favorites");
-    localStorage.setItem("favorites", JSON.stringify(favorites));
+  $('.rmv-fav').on('click', function (e) {
+
+      var num = $(this).attr('data-heart')
+      favorites.splice(num, 1)
+      
+      localStorage.removeItem('favorites')
+      localStorage.setItem('favorites', JSON.stringify(favorites))
+      
+      displayFavorites()
+      })
+
 
     displayFavorites();
   });
 }
+

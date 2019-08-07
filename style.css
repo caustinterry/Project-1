@@ -1,14 +1,22 @@
-body {
-  margin: 0;
-  padding: 0;
-  background: wheat;
-  width: 100%;
+body{
+    margin: 0;
+    padding: 0;
+    background: wheat;
+    width: 100%;
+    margin-bottom: 60px;
 }
 
-.carousel {
-  transform: translateY(-370px);
-  height: 1200px;
-  perspective: 500px;
+.container {
+    height: 1000px;
+
+}
+
+.carousel{
+    transform: translateY(-370px);
+    height: 1200px;
+    perspective: 500px;
+   
+
 }
 
 .card-title {
@@ -56,21 +64,27 @@ h5 {
 }
 
 .favorite-drinks {
-  display: inline-block;
-  width: 100%;
-  height: 5000px;
-  border: 1px solid black;
-  vertical-align: middle;
+
+    display: inline-block;
+    width: 100%;
+    /* height: 5000px; */
+    vertical-align: middle;
 }
 .drinkBox {
-  width: 300px;
-  cursor: pointer;
-  display: inline-block;
-  margin-right: 25px;
-  margin-top: 80px;
-  vertical-align: top;
+    width: 300px;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 25px;
+    margin-top: 80px;
+    vertical-align: top;
 }
 
 .drinkBox img {
-  width: 100%;
+    width: 100%;
 }
+
+.fav-message {
+    margin: auto;
+    text-align: center;
+}
+
