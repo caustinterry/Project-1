@@ -177,7 +177,7 @@ let parseIngredients = (function (drink, drinkPosition) {
 
   for (let i = 1; i <= 15; i++) {
 
-    if (drink['strMeasure' + i] != null && drink['strIngredient' + i] != null) {
+    if (drink['strMeasure' + i].length !== 0 && drink['strIngredient' + i].length !== 0) {
       $('#drinkIngredients' + drinkPosition).append('<li>' + drink['strMeasure' + i] + ' ' + drink['strIngredient' + i] + '</li>');
 
     }
@@ -222,32 +222,35 @@ loadDrinks(95);
 
 var favorites = getFavorites()
 
-displayFavorites(favorites)
+displayFavorites()
 
 
 //Get favorites from localStorage. If favorites parse, if not
 function getFavorites() {
   favorites = JSON.parse(localStorage.getItem('favorites'))
-
-  if (favorites) {
+  
+  if (favorites !== null && favorites.length !== 0) {
     return favorites
   } else {
-    $('.fav-message').html('<h4 class="read">Click<i class="material-icons left">favorite_border</i> to add your favorite recipes here!</h4>')
+    $('.fav-message').html('<h4 class="read">Click &quot;<i class="material-icons">favorite_border</i>&quot; to add your favorite recipes here!</h4>')
     return favorites = []
     
   }
 }
 
 function saveFavorites(a, b, c, d) {
-  favorites.push({
-   name: a,
-   img: b,
-   instructions: c,
-   ingredients: d
-  })
   
-  localStorage.removeItem('favorites')
-  localStorage.setItem('favorites', JSON.stringify(favorites))
+    favorites.push({
+      name: a,
+      img: b,
+      instructions: c,
+      ingredients: d
+     })
+     
+     localStorage.removeItem('favorites')
+     localStorage.setItem('favorites', JSON.stringify(favorites))
+  
+  
   
 }
 
@@ -257,83 +260,92 @@ function addFavOption() {
   $('.material-icons').on("click", function () {
 
     $(this).css('background-color', 'red')
+    $(this).css('border-radius', '5px')
     $('.read').css('display', 'none')
 
     var heartNum = $(this).attr('data-heart')
     var name = $('#drinkName' + [heartNum]).text()
     var img = $('#drinkImage' + [heartNum]).attr('src')
     var instructions = $('#drinkInstructions' + [heartNum]).text()
+    
+    var newIngredients = []
+    var children = $('#drinkIngredients' + [heartNum]).children().length
 
-    var ingredients = $('#drinkIngredients' + [heartNum]).children().text()
-    var children = $('#drinkIngredients' + [heartNum]).children()
-    console.log(children)
-    var ingredients2 = $('#drinkIngredients' + [heartNum]).children().eq(1).text()
-    // console.log(ingredients)
-    // console.log(ingredients2)
-
-    saveFavorites(name, img, instructions, ingredients)
-    displayFavorites(favorites)
+    for (var i = 0; i < children; i++) {
+      var ingredients2 = $('#drinkIngredients' + [heartNum]).children().eq(i).text()
+      newIngredients.push(ingredients2)
+    }
+    
+    saveFavorites(name, img, instructions, newIngredients)
+    displayFavorites()
   
   }) 
     
 }
 
-function displayFavorites(array) {
+function displayFavorites() {
+
+  if (favorites === null || favorites.length === 0) {
+    $('.fav-message').html('<h4 class="read">Click &quot<i class="material-icons">favorite_border</i>&quot to add your favorite recipes here!</h4>')
+  }
 
     $('.favorite-drinks').empty()
 
-    for (var i = 0; i < array.length; i++) {
+      for (var i = 0; i < favorites.length; i++) {
 
-      var drinkBox = $('<div>').addClass('drinkBox')
-      var h5 = $('<h5>')
-      var icon = $('<i>').addClass('material-icons left rmv-fav')
-      icon.attr('fav-heart', i)
-      icon.css('background-color', 'red')
-      icon.css('border-radius', '5px')
-      icon.text('favorite_border')
-      var drinkName = $('<span>')
-      drinkName.text(array[i].name)
-      // console.log(favorites[i].name)
-      h5.append(icon)
-      h5.append(drinkName)
-      drinkBox.append(h5)
+        var drinkBox = $('<div>').addClass('drinkBox')
+        var h5 = $('<h5>')
+        var icon = $('<i>').addClass('material-icons left rmv-fav')
+        icon.attr('data-heart', i)
+        icon.css('background-color', 'red')
+        icon.css('border-radius', '5px')
+        icon.text('favorite_border')
+        var drinkName = $('<span>')
+        drinkName.text(favorites[i].name)
+        
+        h5.append(icon)
+        h5.append(drinkName)
+        drinkBox.append(h5)
+  
+        var img = $('<img>')
+        img.attr('src', favorites[i].img)
+        drinkBox.append(img)
+  
+        var instructionsBox = $('<div>').addClass('instructions')
+        var ingredients = $('<ul>')
 
-      var img = $('<img>')
-      img.attr('src', array[i].img)
-      drinkBox.append(img)
+        var sup = favorites[i].ingredients
+        for (var j = 0; j < sup.length; j++) {
+          var li = $('<li>')
+          var item = sup[j]
+          li.text(item)
+          ingredients.append(li)
 
-      var instructionsBox = $('<div>').addClass('instructions')
-      var ingredients = $('<ul>')
-      ingredients.text(array[i].ingredients)
-      var instructions = $('<div>')
-      instructions.text(array[i].instructions)
-      instructionsBox.append(ingredients)
-      instructionsBox.append(instructions)
-      drinkBox.append(instructionsBox)
+        }
 
+        var instructions = $('<div>')
+        instructions.text(favorites[i].instructions)
+        instructionsBox.append(ingredients)
+        instructionsBox.append(instructions)
+        drinkBox.append(instructionsBox)
+
+        $('.favorite-drinks').prepend(drinkBox)
+      }
     
-      $('.favorite-drinks').prepend(drinkBox)
-    }
     delFav()
 }
 
 function delFav() {
 
   $('.rmv-fav').on('click', function (e) {
-      // console.log($(this))
-      // $(this).parent().parent().remove()
-      // $(this).remove()
-      // console.log(favorites)
-      var num = $(this).attr('fav-heart')
-      // console.log(num)
+
+      var num = $(this).attr('data-heart')
       favorites.splice(num, 1)
-      // console.log(favorites)
       
       localStorage.removeItem('favorites')
       localStorage.setItem('favorites', JSON.stringify(favorites))
       
-
-      displayFavorites(favorites)
+      displayFavorites()
       })
 
 }
