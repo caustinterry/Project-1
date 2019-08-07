@@ -184,7 +184,7 @@ let loadDrinks = function (currentTemp) {
   })
 
 
-});
+};
 
 
 //'Search by id' API URL. Response contains name, pic, measurements, instructions, and ingredients
