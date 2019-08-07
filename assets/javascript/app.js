@@ -397,10 +397,7 @@ function displayFavorites() {
 }
 
 function delFav() {
-  $(".rmv-fav").on("click", function (e) {
-    var num = $(this).attr("fav-heart");
-    favorites.splice(num, 1);
-    console.log(num);
+  
 
   $('.rmv-fav').on('click', function (e) {
 
@@ -413,8 +410,7 @@ function delFav() {
       displayFavorites()
       })
 
+    }
 
-    displayFavorites();
-  });
-}
+
 
