@@ -73,10 +73,11 @@ function showPosition(position) {
       cardStack.append(cardContent); //adds content location for card
       $(".card-content").append("<p>" + weatherResponse.name + "</p>");
       $(".card-content").append("<p>Current Temp: " + localTemp + "</p>");
+
+      loadDrinks(localTemp); //drinks will load initially by the local weather if user allows it.
     });
   }
   weather();
-  loadDrinks(localTemp); //drinks will load intially by the local weather if user allows it.
 }
 
 getLocation();
@@ -91,7 +92,7 @@ function zipWeather() {
 
   var zipWeatherAPI = "4b5ee7805cd7b4c7d16b45e019860920";
   var zipWeatherURL =
-    "https://api.openweathermap.org/data/2.5/weather?zip=" +
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
     zip +
     ",us&APPID=" +
     zipWeatherAPI +
@@ -104,6 +105,7 @@ function zipWeather() {
     console.log(zipWeatherResponse);
     zipTemp = zipWeatherResponse.main.temp;
     console.log(zipTemp);
+
     $("#weatherDisplay").empty(); //emptying the weather display
 
     var weatherCard = $("<div>"); //creates a horizontal card to display weather
