@@ -6,8 +6,13 @@ body{
     margin-bottom: 60px;
 }
 
+.container {
+    height: 1000px;
+
+}
+
 .carousel{
-    transform: translateY(-170px);
+    transform: translateY(-370px);
     height: 1200px;
     perspective: 500px;
    
