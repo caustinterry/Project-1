@@ -104,6 +104,36 @@ function zipWeather() {
     console.log(zipWeatherResponse);
     zipTemp = zipWeatherResponse.main.temp;
     console.log(zipTemp);
+    $("#weatherDisplay").empty(); //emptying the weather display
+
+    var weatherCard = $("<div>"); //creates a horizontal card to display weather
+    weatherCard.attr("class", "card horizontal");
+
+    var weatherImgCard = $("<div>");
+    weatherImgCard.attr("class", "card-image");
+
+    var weatherImg = $("<img>"); //pulls weather image from ajax call
+    weatherImg.attr(
+      "src",
+      "http://openweathermap.org/img/wn/" +
+        zipWeatherResponse.weather[0].icon +
+        "@2x.png"
+    );
+
+    var cardStack = $("<div>");
+    cardStack.attr("class", "card-stacked");
+
+    var cardContent = $("<div>");
+    cardContent.attr("class", "card-content");
+
+    $("#weatherDisplay").html(weatherCard); //adds the first card to HTML
+    weatherCard.append(weatherImgCard); //adds image card to weather card
+    weatherImgCard.append(weatherImg); //adds image to image card
+    weatherCard.append(cardStack); //adds stack for the card
+    cardStack.append(cardContent); //adds content location for card
+    $(".card-content").append("<p>" + zipWeatherResponse.name + "</p>");
+    $(".card-content").append("<p>Current Temp: " + zipTemp + "</p>");
+
     loadDrinks(zipTemp); //if user puts in zipcode the drinks will change to zipcode
   });
 }
