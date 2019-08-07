@@ -1,80 +1,76 @@
-body{
-    margin: 0;
-    padding: 0;
-    background: wheat;
-    width: 100%;
+body {
+  margin: 0;
+  padding: 0;
+  background: wheat;
+  width: 100%;
 }
 
-.carousel{
-    transform: translateY(-170px);
-    height: 1200px;
-    perspective: 500px;
-   
+.carousel {
+  transform: translateY(-370px);
+  height: 1200px;
+  perspective: 500px;
 }
 
-.card-title{
-    margin: 50px;
-    display:inline;
+.card-title {
+  margin: 50px;
+  display: inline;
 }
-.carousel .carousel-item{
-    width: 400px;
-    cursor: pointer;
-}
-
-.carousel .carousel-item img{
-    width: 100%;
-}
-h5{
-    margin: -50px 0 0;
-    padding: 0;
-    background: #ffffff;
-    color: #000000;
-    box-sizing: border-box;
-    padding: 10px 5px;
-    font-weight: bold;
-    font-size: 2em;
-    text-align: center;
+.carousel .carousel-item {
+  width: 400px;
+  cursor: pointer;
 }
 
-.instructions{
-    list-style-type:square;
-    margin: 0;
-    padding: 0;
-        background: #ffffff;
-    color: #000000;
-    box-sizing: border-box;
-    text-align: center;
+.carousel .carousel-item img {
+  width: 100%;
 }
-.btn-large{
-    border-radius: 10px;
+h5 {
+  margin: -50px 0 0;
+  padding: 0;
+  background: #ffffff;
+  color: #000000;
+  box-sizing: border-box;
+  padding: 10px 5px;
+  font-weight: bold;
+  font-size: 2em;
+  text-align: center;
 }
 
+.instructions {
+  list-style-type: square;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #000000;
+  box-sizing: border-box;
+  text-align: center;
+}
+.btn-large {
+  border-radius: 10px;
+}
 
 /******************Favorites Styles***********************************/
 
 .favorites {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .favorite-drinks {
-
-    display: inline-block;
-    width: 100%;
-    height: 5000px;
-    border: 1px solid black;
-    vertical-align: middle;
+  display: inline-block;
+  width: 100%;
+  height: 5000px;
+  border: 1px solid black;
+  vertical-align: middle;
 }
 .drinkBox {
-    width: 300px;
-    cursor: pointer;
-    display: inline-block;
-    margin-right: 25px;
-    margin-top: 80px;
-    vertical-align: top;
-    
+  width: 300px;
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 25px;
+  margin-top: 80px;
+  vertical-align: top;
 }
 
 .drinkBox img {
-    width: 100%;
+  width: 100%;
 }
