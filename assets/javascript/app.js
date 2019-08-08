@@ -1,8 +1,6 @@
 ///////////////////////Global Variables//////////////////////////////////////////////
-var ingredient;
-
-
-
+let randomDrink;
+let uniqueDrink = [];
 
 
 
@@ -152,12 +150,15 @@ let getRandom = function (maxNumber) {
 };
 
 ///////////////function that loads the drinks based on the weather ///////////////////
-////////TODO: this will need to be added into our weather function once the search feature is enabled///////
+
 
 let loadDrinks = function (currentTemp) {
   let randomIngredient = weatherBasedIngredient(currentTemp);
 
-  //Search currently set to to global variable 'ingredient' determined by weather temperature.
+  //empty the array each time the function is called
+  uniqueDrink = [];
+
+  //Search currently set to to global variable 'ingredient' determined by temperature.
   let drinkURL =
     "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=" +
     randomIngredient;
@@ -167,29 +168,48 @@ let loadDrinks = function (currentTemp) {
     url: drinkURL,
     method: "GET"
   }).then(function (response) {
-    for (var i = 0; i <= 5; i++) {
-      //Generates a random number on each loop and chooses a drink
-      let randomDrink = getRandom(response.drinks.length);
-      let currentDrink = response.drinks[randomDrink];
+    //while loop to go through the uniqueDrink array
+    while (uniqueDrink.length < 5) {
+      //pull a random drink from the drink API
+      let currentRandom = newRandomValue(response.drinks)
+      //if the drink does not exist in the uniqueDrink array
+      if (!existsInArray(currentRandom, uniqueDrink)) {
+        //then we will push the drink the uniqueDrink array
+        uniqueDrink.push(currentRandom);
+      } //else it will keep going through the drinks in the database until the array is full (5 drinks)
+    }
+
+    //now we need to loop through the array to get the information below:
+    for (var i = 1; i < 6; i++) {
 
       //Appends the current drink in to the corresponding span pre-set in HTML.
       //Assigns a data-attr 'id' to be used as a unique identifier for second Ajax call.
-      $("#drinkName" + i).html(currentDrink.strDrink);
-      $("#drinkName" + i).attr("data-id", currentDrink.idDrink);
+      $("#drinkName" + i).html(uniqueDrink[i - 1].strDrink);
+      $("#drinkName" + i).attr("data-id", uniqueDrink[i - 1].idDrink);
     }
     //Calling this function after the above 'for loop' finishes to keep code synchronous
 
     drinkId()
-    
+
   })
 
 
 };
 
+function newRandomValue(arr) {
+  let currentValue = Math.floor(Math.random() * arr.length);
+  return arr[currentValue];
+}
+
+function existsInArray(val, arr) {
+  return arr.indexOf(val) > -1
+}
+
+
+
 
 //'Search by id' API URL. Response contains name, pic, measurements, instructions, and ingredients
-let drinkDetailsURL =
-  "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=";
+var drinkDetailsURL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=";
 
 //This function makes an Ajax call for each drink name added into the HTML
 function drinkId() {
@@ -286,33 +306,38 @@ displayFavorites()
 //Get favorites from localStorage. If favorites parse, if not
 function getFavorites() {
   favorites = JSON.parse(localStorage.getItem('favorites'))
-  
+
   if (favorites !== null && favorites.length !== 0) {
     return favorites
   } else {
     $('.fav-message').html('<h4 class="read">Click &quot;<i class="material-icons">favorite_border</i>&quot; to add your favorite recipes here!</h4>')
     return favorites = []
-    
+
   }
 }
 
 function saveFavorites(a, b, c, d) {
-  
+  console.log('running saveFavorites');
+
+  var checkval = { name: a, img: b, instructions: c, ingredients: d };
+  // if (!containsObject(checkval, favorites)) {
+  var found = favorites.some(el => el.name === a);
+  if (!found) {
     favorites.push({
       name: a,
       img: b,
       instructions: c,
       ingredients: d
-     })
-     
-     localStorage.removeItem('favorites')
-     localStorage.setItem('favorites', JSON.stringify(favorites))
-  
-  
-  
+    })
+  }
+  //console.log('favorites-after' + JSON.stringify(favorites));
+  localStorage.removeItem('favorites')
+  localStorage.setItem('favorites', JSON.stringify(favorites))
+  //console.log('localstorage fav:' + JSON.stringify(localStorage.getItem('favorites')));
+
+
 
 }
-
 
 function addFavOption() {
 
@@ -327,7 +352,7 @@ function addFavOption() {
     var name = $('#drinkName' + [heartNum]).text()
     var img = $('#drinkImage' + [heartNum]).attr('src')
     var instructions = $('#drinkInstructions' + [heartNum]).text()
-    
+
     var newIngredients = []
     var children = $('#drinkIngredients' + [heartNum]).children().length
 
@@ -335,82 +360,84 @@ function addFavOption() {
       var ingredients2 = $('#drinkIngredients' + [heartNum]).children().eq(i).text()
       newIngredients.push(ingredients2)
     }
-    
+
     saveFavorites(name, img, instructions, newIngredients)
     displayFavorites()
-  
-  }) 
-    
+
+  })
+
 }
 
 function displayFavorites() {
+
+  $('.drinkBox').remove();
 
   if (favorites === null || favorites.length === 0) {
     $('.fav-message').html('<h4 class="read">Click &quot<i class="material-icons">favorite_border</i>&quot to add your favorite recipes here!</h4>')
   }
 
-    $('.favorite-drinks').empty()
+  $('.favorite-drinks').empty()
 
-      for (var i = 0; i < favorites.length; i++) {
+  for (var i = 0; i < favorites.length; i++) {
 
-        var drinkBox = $('<div>').addClass('drinkBox')
-        var h5 = $('<h5>')
-        var icon = $('<i>').addClass('material-icons left rmv-fav')
-        icon.attr('data-heart', i)
-        icon.css('background-color', 'red')
-        icon.css('border-radius', '5px')
-        icon.text('favorite_border')
-        var drinkName = $('<span>')
-        drinkName.text(favorites[i].name)
-        
-        h5.append(icon)
-        h5.append(drinkName)
-        drinkBox.append(h5)
-  
-        var img = $('<img>')
-        img.attr('src', favorites[i].img)
-        drinkBox.append(img)
-  
-        var instructionsBox = $('<div>').addClass('instructions')
-        var ingredients = $('<ul>')
+    var drinkBox = $('<div>').addClass('drinkBox')
+    var h5 = $('<h5>')
+    var icon = $('<i>').addClass('material-icons left rmv-fav')
+    icon.attr('data-heart', i)
+    icon.css('background-color', 'red')
+    icon.css('border-radius', '5px')
+    icon.text('favorite_border')
+    var drinkName = $('<span>')
+    drinkName.text(favorites[i].name)
 
-        var sup = favorites[i].ingredients
-        for (var j = 0; j < sup.length; j++) {
-          var li = $('<li>')
-          var item = sup[j]
-          li.text(item)
-          ingredients.append(li)
+    h5.append(icon)
+    h5.append(drinkName)
+    drinkBox.append(h5)
 
-        }
+    var img = $('<img>')
+    img.attr('src', favorites[i].img)
+    drinkBox.append(img)
 
-        var instructions = $('<div>')
-        instructions.text(favorites[i].instructions)
-        instructionsBox.append(ingredients)
-        instructionsBox.append(instructions)
-        drinkBox.append(instructionsBox)
+    var instructionsBox = $('<div>').addClass('instructions')
+    var ingredients = $('<ul>')
 
-        $('.favorite-drinks').prepend(drinkBox)
-      }
-    
-    delFav()
+    var sup = favorites[i].ingredients
+    for (var j = 0; j < sup.length; j++) {
+      var li = $('<li>')
+      var item = sup[j]
+      li.text(item)
+      ingredients.append(li)
+
+    }
+
+    var instructions = $('<div>')
+    instructions.text(favorites[i].instructions)
+    instructionsBox.append(ingredients)
+    instructionsBox.append(instructions)
+    drinkBox.append(instructionsBox)
+
+    $('.favorite-drinks').prepend(drinkBox)
+  }
+
+  delFav()
 
 }
 
 function delFav() {
-  
+
 
   $('.rmv-fav').on('click', function (e) {
 
-      var num = $(this).attr('data-heart')
-      favorites.splice(num, 1)
-      
-      localStorage.removeItem('favorites')
-      localStorage.setItem('favorites', JSON.stringify(favorites))
-      
-      displayFavorites()
-      })
+    var num = $(this).attr('data-heart')
+    favorites.splice(num, 1)
 
-    }
+    localStorage.removeItem('favorites')
+    localStorage.setItem('favorites', JSON.stringify(favorites))
+
+    displayFavorites()
+  })
+
+}
 
 
 
